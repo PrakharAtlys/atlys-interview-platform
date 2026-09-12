@@ -1,0 +1,12 @@
+{
+  "name": "atlys-proctor",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:challenge-leaky-login": "npm run dev --workspace=apps/challenge-leaky-login"
+  }
+}
