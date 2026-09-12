@@ -1,6 +1,6 @@
 // Internal Tools Console — bundled client script
 // TODO(dev): remove this before shipping, using for local QA only
-const DEBUG_PW = "atlys@123";
+const DEBUG_PW = "atlys_ka_password_kya_hai";
 
 document.getElementById('loginForm').addEventListener('submit', function (e) {
   e.preventDefault();

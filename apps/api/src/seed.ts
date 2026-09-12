@@ -8,7 +8,7 @@ const CHALLENGES = [
     title: 'The Leaky Login Page',
     description: "Log in as admin. You don't have the password — figure it out.",
     type: 'web_app',
-    expectedAnswerRegex: 'atlys@123',
+    expectedAnswerRegex: 'atlys_ka_password_kya_hai',
     order: 1,
   },
   {
@@ -16,7 +16,7 @@ const CHALLENGES = [
     title: 'The Base64 "Encrypted" Config',
     description: "This secret is 'encrypted.' Decode it and tell us what it says.",
     type: 'web_app',
-    expectedAnswerRegex: 'atlys_secret_2026',
+    expectedAnswerRegex: 'moneyfollowsmybrothermoneyfollows',
     order: 2,
   },
   {
@@ -79,7 +79,7 @@ async function main() {
     challenges.push(
       await prisma.challenge.upsert({
         where: { slug: c.slug },
-        update: {},
+        update: c,
         create: c,
       }),
     )
