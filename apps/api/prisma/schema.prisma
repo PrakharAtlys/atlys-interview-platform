@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // SQLite for zero-setup local dev. Swap to postgresql for staging/prod
+  // (see prompt.md §8 — Postgres is the intended production datastore).
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Candidate {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  createdAt DateTime  @default(now())
+  sessions  Session[]
+}
+
+model Session {
+  id             String    @id @default(cuid())
+  candidateId    String
+  candidate      Candidate @relation(fields: [candidateId], references: [id])
+  inviteToken    String    @unique
+  status         String    @default("invited") // invited | in_progress | submitted | reviewed
+  consentAt      DateTime?
+  consentVersion String?
+  consentIp      String?
+  startedAt      DateTime?
+  endsAt         DateTime?
+  submittedAt    DateTime?
+  createdAt      DateTime  @default(now())
+
+  events      Event[]
+  submissions Submission[]
+  recordings  RecordingChunk[]
+}
+
+model Challenge {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  type        String // web_app | downloadable_artifact | repo | llm
+  expectedAnswerRegex String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  submissions Submission[]
+}
+
+model Submission {
+  id               String    @id @default(cuid())
+  sessionId        String
+  session          Session   @relation(fields: [sessionId], references: [id])
+  challengeId      String
+  challenge        Challenge @relation(fields: [challengeId], references: [id])
+  answer           String
+  evidence         String?
+  autoCheckPassed  Boolean?
+  reviewerVerdict  String? // pass | partial | fail
+  reviewerNotes    String?
+  timeSpentSeconds Int?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@unique([sessionId, challengeId])
+}
+
+model Event {
+  id             String   @id @default(cuid())
+  sessionId      String
+  session        Session  @relation(fields: [sessionId], references: [id])
+  type           String // tab_hidden, tab_visible, window_blur, fullscreen_exit, paste, no_face, multi_monitor_detected, ...
+  metaJson       String? // JSON-encoded metadata
+  screenshotPath String? // webcam frame captured at the moment of a face-presence flag
+  occurredAt     DateTime @default(now())
+}
+
+model RecordingChunk {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  channel   String   @default("webcam") // webcam | screen
+  seq       Int
+  path      String
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorEmail String
+  action     String // viewed_session, exported_results, reviewed_submission, ...
+  targetId   String?
+  createdAt  DateTime @default(now())
+}
