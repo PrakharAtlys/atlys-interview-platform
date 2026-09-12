@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Atlys — Session Debug</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f1115;
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    color: #e5e7eb;
+    padding: 24px;
+  }
+  .card {
+    width: 520px;
+    max-width: 100%;
+    background: #171a21;
+    border: 1px solid #2a2e3a;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  h1 { font-size: 15px; margin: 0 0 4px; }
+  p.sub { color: #9ca3af; font-size: 13px; margin: 0 0 16px; }
+  .token {
+    background: #0f1115;
+    border: 1px solid #2a2e3a;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 12px;
+    font-family: ui-monospace, monospace;
+    word-break: break-all;
+    color: #00e5b0;
+  }
+  .badge {
+    display: inline-flex;
+    margin-top: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(124,92,255,0.15);
+    color: #a78bff;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>You're logged in</h1>
+    <p class="sub">Debug: your session token (also stored as a cookie)</p>
+    <div class="token">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZ3Vlc3QiLCJyb2xlIjoiZ3Vlc3QifQ.fakesignaturefordemopurposesonly</div>
+    <span class="badge">Signed in as guest</span>
+  </div>
+</body>
+</html>

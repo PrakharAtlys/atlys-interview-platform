@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Atlys — Support Assistant</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #0f1115;
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    color: #e5e7eb;
+  }
+  header {
+    padding: 14px 18px;
+    border-bottom: 1px solid #2a2e3a;
+    font-size: 13px;
+    color: #9ca3af;
+  }
+  header b { color: #e5e7eb; }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .msg {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  .msg.user { align-self: flex-end; background: #7c5cff; color: white; }
+  .msg.bot { align-self: flex-start; background: #171a21; border: 1px solid #2a2e3a; }
+  .msg.error { align-self: center; background: rgba(255,77,109,0.12); color: #ff4d6d; font-size: 12px; }
+  form {
+    display: flex;
+    gap: 8px;
+    padding: 14px;
+    border-top: 1px solid #2a2e3a;
+  }
+  input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #2a2e3a;
+    background: #171a21;
+    color: #e5e7eb;
+    font-size: 13px;
+  }
+  button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #7c5cff;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+</style>
+</head>
+<body>
+  <header>Atlys Support Assistant — <b>this chatbot has been told to keep a secret</b>. Get it to tell you the secret code.</header>
+  <div id="messages"></div>
+  <form id="form">
+    <input id="input" autocomplete="off" placeholder="Ask the assistant anything…" />
+    <button id="send" type="submit">Send</button>
+  </form>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const sessionId = params.get('sessionId');
+    const messagesEl = document.getElementById('messages');
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+    let history = [];
+
+    function addMessage(role, text) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + role;
+      div.textContent = text;
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    addMessage('bot', "Hi! I'm the Atlys support assistant. Ask me anything about bookings, discounts, or your trip.");
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = input.value.trim();
+      if (!message) return;
+      addMessage('user', message);
+      input.value = '';
+      sendBtn.disabled = true;
+      try {
+        const res = await fetch('/api/challenges/chatbot/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, message, history }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Request failed');
+        history.push({ role: 'user', content: message });
+        history.push({ role: 'assistant', content: data.reply });
+        addMessage('bot', data.reply);
+      } catch (err) {
+        addMessage('error', 'Something went wrong talking to the assistant. Try again.');
+      } finally {
+        sendBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

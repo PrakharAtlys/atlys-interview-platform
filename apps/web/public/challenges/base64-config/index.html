@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Atlys — Config Viewer</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f1115;
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    color: #e5e7eb;
+    padding: 24px;
+  }
+  .card {
+    width: 460px;
+    max-width: 100%;
+    background: #171a21;
+    border: 1px solid #2a2e3a;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  h1 { font-size: 15px; margin: 0 0 4px; }
+  p.sub { color: #9ca3af; font-size: 13px; margin: 0 0 16px; }
+  pre {
+    background: #0f1115;
+    border: 1px solid #2a2e3a;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    color: #c084fc;
+  }
+  .key { color: #9ca3af; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>service-config.json</h1>
+    <p class="sub">Fetched from GET /internal/config</p>
+    <pre>{
+  <span class="key">"serviceName"</span>: "atlys-notify",
+  <span class="key">"env"</span>: "staging",
+  <span class="key">"apiSecret"</span>: "YXRseXNfc2VjcmV0XzIwMjY=",
+  <span class="key">"encryption"</span>: "enabled"
+}</pre>
+  </div>
+</body>
+</html>
