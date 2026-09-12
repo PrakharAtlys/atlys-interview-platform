@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+
+  --color-void: #05060a;
+  --color-surface: #0d0f16;
+  --color-surface-raised: #12141e;
+  --color-panel: #171a26;
+  --color-border: #262a3a;
+  --color-border-hover: #3a3f56;
+
+  --color-ink: #e7e9f5;
+  --color-ink-dim: #9aa0b8;
+  --color-ink-faint: #5a5f75;
+
+  --color-flux: #7c5cff;
+  --color-flux-bright: #a78bff;
+  --color-flux-dim: rgba(124, 92, 255, 0.15);
+
+  --color-signal: #00e5b0;
+  --color-signal-dim: rgba(0, 229, 176, 0.15);
+
+  --color-alert: #ff4d6d;
+  --color-alert-dim: rgba(255, 77, 109, 0.15);
+
+  --color-warn: #ffb020;
+  --color-warn-dim: rgba(255, 176, 32, 0.15);
+
+  --animate-pulse-glow: pulse-glow 2.4s ease-in-out infinite;
+  --animate-scan: scan 3s linear infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--color-flux-dim); }
+  50% { opacity: 0.85; box-shadow: 0 0 0 8px transparent; }
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 20% -10%, rgba(124, 92, 255, 0.12), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(0, 229, 176, 0.08), transparent 35%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: var(--color-flux);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
+
+.glass {
+  background: rgba(23, 26, 38, 0.6);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--color-border);
+}
+
+.text-gradient {
+  background: linear-gradient(120deg, var(--color-flux-bright), var(--color-signal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
